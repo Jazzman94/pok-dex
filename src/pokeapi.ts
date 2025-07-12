@@ -94,7 +94,14 @@ export type Pokemon = {
   base_experience: number;
   height: number;
   weight: number;
+  stats: {stat: { name: string; url: string },
+    base_stat: number,
+    effort: number
+  }[];
+  types: {slot: number,
+    type: { name: string; url: string }}[];
 }
+
 
 export type ShallowLocations = {
   count: number;

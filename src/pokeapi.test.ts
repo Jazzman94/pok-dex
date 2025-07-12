@@ -32,3 +32,16 @@ describe.each([
     expect(responses[1].id).toBe(expected[1]);
   });
 });
+
+describe.each([
+  {
+    input: ["squirtle"],
+    expected: [63],
+  },
+])("PokeApi pokemon{name} endpoint $input", ({input, expected }) => {
+  test(`Expected: ${expected}`, async () => {
+    const responses = await Promise.all(input.map(name => pokeAPI.fetchPokemon(name)));
+    
+    expect(responses[0].base_experience).toBe(expected[0]);
+  });
+});

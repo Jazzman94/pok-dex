@@ -22,7 +22,7 @@ export function startREPL(state: State) {
     }
 
     try {
-      cmd.callback(state);
+      cmd.callback(state, words[1]);
     } catch (e) {
       console.log(e);
     }

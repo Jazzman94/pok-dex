@@ -4,50 +4,101 @@ export class PokeAPI {
   constructor() {}
 
   async fetchLocations(pageURL?: string): Promise<ShallowLocations> {
-    if (!pageURL) {
-        pageURL = `${PokeAPI.baseURL}/location-area?limit=20&offset=0`;
-    }
-    
-    const response = await fetch(pageURL, {
-        method: "GET",
-        mode: "cors"
-    });
+    const url = pageURL || `${PokeAPI.baseURL}/location-area`;
 
-    return response.json();
+    try {
+      const resp = await fetch(url);
+
+      if (!resp.ok) {
+        throw new Error(`${resp.status} ${resp.statusText}`);
+      }
+
+      const locations: ShallowLocations = await resp.json();
+      return locations;
+    } catch (e) {
+      throw new Error(`Error fetching locations: ${(e as Error).message}`);
+    }
   }
 
   async fetchLocation(locationName: string): Promise<Location> {
-    const respone = await fetch(`${PokeAPI.baseURL}/location-area/${locationName}`, {
-        method: "GET",
-        mode: "cors"
-    });
-    return respone.json();
+    const url = `${PokeAPI.baseURL}/location-area/${locationName}`;
+
+    try {
+      const resp = await fetch(url);
+
+      if (!resp.ok) {
+        throw new Error(`${resp.status} ${resp.statusText}`);
+      }
+
+      const location: Location = await resp.json();
+      return location;
+    } catch (e) {
+      throw new Error(
+        `Error fetching location '${locationName}': ${(e as Error).message}`,
+      );
+    }
   }
 }
 
 export type ShallowLocations = {
-    count: number;
-    next?: string;
-    previous?: string;
-    results: {name: string}[]
+  count: number;
+  next: string;
+  previous: string;
+  results: {
+    name: string;
+    url: string;
+  }[];
 };
 
 export type Location = {
-  id: number;
-  name: string;
+  encounter_method_rates: {
+    encounter_method: {
+      name: string;
+      url: string;
+    };
+    version_details: {
+      rate: number;
+      version: {
+        name: string;
+        url: string;
+      };
+    }[];
+  }[];
   game_index: number;
-
+  id: number;
+  location: {
+    name: string;
+    url: string;
+  };
+  name: string;
+  names: {
+    language: {
+      name: string;
+      url: string;
+    };
+    name: string;
+  }[];
+  pokemon_encounters: {
+    pokemon: {
+      name: string;
+      url: string;
+    };
+    version_details: {
+      encounter_details: {
+        chance: number;
+        condition_values: any[];
+        max_level: number;
+        method: {
+          name: string;
+          url: string;
+        };
+        min_level: number;
+      }[];
+      max_chance: number;
+      version: {
+        name: string;
+        url: string;
+      };
+    }[];
+  }[];
 };
-
-
-/*
-async function getUsers(url: string, apiKey: string): Promise<UserProfile[]> {
-  const response = await fetch(url, {
-    method: "GET",
-    mode: "cors",
-    headers: {"X-API-KEY": apiKey}
-  });
-  return response.json();
-}
-
-*/

@@ -2,31 +2,31 @@ export class PokeAPI {
     static baseURL = "https://pokeapi.co/api/v2";
     constructor() { }
     async fetchLocations(pageURL) {
-        if (!pageURL) {
-            pageURL = `${PokeAPI.baseURL}/location-area?limit=20&offset=0`;
+        const url = pageURL || `${PokeAPI.baseURL}/location-area`;
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) {
+                throw new Error(`${resp.status} ${resp.statusText}`);
+            }
+            const locations = await resp.json();
+            return locations;
         }
-        const response = await fetch(pageURL, {
-            method: "GET",
-            mode: "cors"
-        });
-        return response.json();
+        catch (e) {
+            throw new Error(`Error fetching locations: ${e.message}`);
+        }
     }
     async fetchLocation(locationName) {
-        const respone = await fetch(`${PokeAPI.baseURL}/location-area/${locationName}`, {
-            method: "GET",
-            mode: "cors"
-        });
-        return respone.json();
+        const url = `${PokeAPI.baseURL}/location-area/${locationName}`;
+        try {
+            const resp = await fetch(url);
+            if (!resp.ok) {
+                throw new Error(`${resp.status} ${resp.statusText}`);
+            }
+            const location = await resp.json();
+            return location;
+        }
+        catch (e) {
+            throw new Error(`Error fetching location '${locationName}': ${e.message}`);
+        }
     }
 }
-/*
-async function getUsers(url: string, apiKey: string): Promise<UserProfile[]> {
-  const response = await fetch(url, {
-    method: "GET",
-    mode: "cors",
-    headers: {"X-API-KEY": apiKey}
-  });
-  return response.json();
-}
-
-*/ 

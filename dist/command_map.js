@@ -1,17 +1,19 @@
-export async function commandMap(states) {
-    const locations = await states.pokeAPI.fetchLocations(states.nextLocationsURL);
-    for (const location of locations.results) {
-        console.log(`${location.name}`);
+export async function commandMapForward(state) {
+    const locations = await state.pokeAPI.fetchLocations(state.nextLocationsURL);
+    state.nextLocationsURL = locations.next;
+    state.prevLocationsURL = locations.previous;
+    for (const loc of locations.results) {
+        console.log(loc.name);
     }
-    states.nextLocationsURL = locations.next;
-    states.previousLocationsURL = locations.previous;
 }
-export async function commandMapB(states) {
-    console.log();
-    const locations = await states.pokeAPI.fetchLocations(states.previousLocationsURL);
-    for (const location of locations.results) {
-        console.log(`${location.name}`);
+export async function commandMapBack(state) {
+    if (!state.prevLocationsURL) {
+        throw new Error("you're on the first page");
     }
-    states.nextLocationsURL = locations.next;
-    states.previousLocationsURL = locations.previous;
+    const locations = await state.pokeAPI.fetchLocations(state.prevLocationsURL);
+    state.nextLocationsURL = locations.next;
+    state.prevLocationsURL = locations.previous;
+    for (const loc of locations.results) {
+        console.log(loc.name);
+    }
 }

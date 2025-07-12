@@ -1,7 +1,9 @@
 import { createInterface } from "readline";
 import { getCommands } from "./commands.js";
+import { PokeAPI } from "./pokeapi.js";
 export function initState() {
     const commands = getCommands();
+    const pokeAPI = new PokeAPI();
     const rl = createInterface({
         input: process.stdin,
         output: process.stdout,
@@ -22,14 +24,25 @@ export function initState() {
             return;
         }
         try {
-            cmd.callback({ readline: rl, commands });
+            await cmd.callback({
+                readline: rl,
+                commands: commands,
+                pokeAPI: pokeAPI,
+                nextLocationsURL: undefined,
+                previousLocationsURL: undefined,
+            });
         }
         catch (e) {
             console.log(e);
         }
         rl.prompt();
     });
-    return { readline: rl, commands: commands };
+    return { readline: rl,
+        commands: commands,
+        pokeAPI: new PokeAPI(),
+        nextLocationsURL: undefined,
+        previousLocationsURL: undefined
+    };
 }
 export function cleanInput(input) {
     return input

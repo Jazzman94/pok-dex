@@ -1,4 +1,4 @@
-export function commandExit(states) {
+export async function commandExit(states) {
     console.log("Closing the Pokedex... Goodbye!");
     states.readline.close();
     process.exit(0);

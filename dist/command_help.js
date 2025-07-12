@@ -1,4 +1,4 @@
-export function commandHelp(states) {
+export async function commandHelp(states) {
     console.log();
     console.log("Welcome to the Pokedex!");
     console.log("Usage:");

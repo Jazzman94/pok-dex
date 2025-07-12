@@ -2,7 +2,7 @@ import { assert } from "console";
 import { PokeAPI } from "./pokeapi.js";
 import { describe, expect, test } from "vitest";
 
-const pokeAPI = new PokeAPI();
+const pokeAPI = new PokeAPI(1000);
 
 describe.each([
   {

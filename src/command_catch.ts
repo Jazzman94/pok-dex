@@ -1,4 +1,3 @@
-import { STATUS_CODES } from "http";
 import type { State } from "./state.js";
 
 export async function commandCatch(state: State, ...args: string[]) {
